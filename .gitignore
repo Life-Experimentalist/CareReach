@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+*.egg-info/
+
+# Secrets & local state
+.env
+users.db
+data/
+
+# Streamlit
+.streamlit/secrets.toml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+*.code-workspace
+
+# Project artifacts
+trash/
+*.zip
