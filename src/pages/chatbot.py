@@ -1,16 +1,10 @@
-import os
 import time
 
-import google.generativeai as genai
 import streamlit as st
-from dotenv import load_dotenv
+from google import genai
 
 from src.db import save_history
 
-load_dotenv()
-genai.configure(api_key=os.environ["GOOGLE_AI_API_KEY"])
-
-_MODEL = "gemini-1.5-flash"
 _AI_AVATAR = "✨"
 
 
@@ -21,13 +15,26 @@ def show(username: str) -> None:
         "This is not a substitute for professional medical advice."
     )
 
+    api_key = st.session_state.get("gemini_api_key")
+    model_name = st.session_state.get("selected_model")
+
+    if not api_key or not model_name:
+        st.info(
+            "Enter your **Gemini API Key** in the ⚙️ AI Settings panel on the left to get started. "
+            "Get a free key at [aistudio.google.com](https://aistudio.google.com/)."
+        )
+        return
+
     if "messages" not in st.session_state:
         st.session_state.messages = []
     if "gemini_history" not in st.session_state:
         st.session_state.gemini_history = []
 
-    model = genai.GenerativeModel(_MODEL)
-    chat = model.start_chat(history=st.session_state.gemini_history)
+    client = genai.Client(api_key=api_key)
+    chat = client.chats.create(
+        model=model_name,
+        history=st.session_state.gemini_history,
+    )
 
     for msg in st.session_state.messages:
         with st.chat_message(msg["role"], avatar=msg.get("avatar")):
@@ -38,16 +45,15 @@ def show(username: str) -> None:
             st.markdown(prompt)
         st.session_state.messages.append({"role": "user", "content": prompt})
 
-        response = chat.send_message(prompt, stream=True)
-
         with st.chat_message("ai", avatar=_AI_AVATAR):
             placeholder = st.empty()
             full = ""
-            for chunk in response:
-                for word in chunk.text.split(" "):
-                    full += word + " "
-                    time.sleep(0.04)
-                    placeholder.write(full + "▌")
+            for chunk in chat.send_message_stream(prompt):
+                if chunk.text:
+                    for word in chunk.text.split(" "):
+                        full += word + " "
+                        time.sleep(0.04)
+                        placeholder.write(full + "▌")
             placeholder.write(full.strip())
 
         st.session_state.messages.append(

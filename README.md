@@ -42,12 +42,14 @@ cp .env.example .env
 ```
 
 ```env
-GOOGLE_AI_API_KEY=your_gemini_api_key
+# Backend secret — only the Maps key is needed here
 GOOGLE_MAPS_API_KEY=your_maps_api_key
 
 # Optional — enables appointment confirmation emails:
 SENDER_EMAIL=your_gmail@gmail.com
 SENDER_PASSWORD=your_gmail_app_password
+
+# Note: Gemini API key is NOT set here — each user enters their own in the app UI.
 ```
 
 ### Run
@@ -66,7 +68,6 @@ Open `http://localhost:8501`.
 4. Under **Advanced settings → Secrets**, add:
 
 ```toml
-GOOGLE_AI_API_KEY = "your_gemini_api_key"
 GOOGLE_MAPS_API_KEY = "your_maps_api_key"
 ```
 
@@ -94,14 +95,23 @@ GOOGLE_MAPS_API_KEY = "your_maps_api_key"
 
 ## Secrets Reference
 
+### Backend secrets (set by you — in `.env` locally, in Streamlit Cloud app secrets for deployment)
+
 | Key | Required | Where to get it |
 |---|---|---|
-| `GOOGLE_AI_API_KEY` | Yes | [Google AI Studio](https://aistudio.google.com/) → Get API key |
 | `GOOGLE_MAPS_API_KEY` | Yes | [Google Cloud Console](https://console.cloud.google.com/) → APIs & Services → Enable Places API → Credentials |
 | `SENDER_EMAIL` | No | Your Gmail address |
 | `SENDER_PASSWORD` | No | [Gmail App Password](https://myaccount.google.com/apppasswords) — requires 2FA enabled |
 
 > **Note on email:** If `SENDER_EMAIL` / `SENDER_PASSWORD` are not set, appointments are still saved to the database — the confirmation email is simply skipped.
+
+### User-provided (entered in the app UI — never stored on the server)
+
+| Key | Required | Where to get it |
+|---|---|---|
+| Gemini API Key | Yes, per user | [Google AI Studio](https://aistudio.google.com/) → Get API key (free tier available) |
+
+Each user enters their own Gemini API key via the **⚙️ AI Settings** panel in the sidebar after logging in. The app fetches their available models dynamically and lets them choose which one to use. The key lives only in their browser session and is never persisted.
 
 ## Tech Stack
 
