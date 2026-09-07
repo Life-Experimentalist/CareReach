@@ -1,0 +1,31 @@
+{
+	"$schema": "https://vkrishna04.me/schemas/project-manifest.schema.json",
+	"manifestVersion": 2,
+	"tagline": "Telemedicine demo: symptom checks, hospital search, appointments.",
+	"summary": "An AI-powered telemedicine platform for remote healthcare consultations, built as a Streamlit app. Users chat with Gemini 1.5 Flash about their symptoms, search nearby hospitals by specialist type through the Google Maps Places API, book appointments, and review their health history, with bcrypt-hashed logins stored in SQLite.",
+	"status": "complete",
+	"icon": "SiStreamlit",
+	"readme": true,
+	"technologies": [
+		"Python",
+		"Streamlit",
+		"Gemini API",
+		"Google Maps API",
+		"SQLite"
+	],
+	"tags": [
+		"telemedicine",
+		"healthcare",
+		"gemini",
+		"streamlit"
+	],
+	"highlights": [
+		"Symptom checker chats with Gemini 1.5 Flash, and every past conversation stays reviewable as health history.",
+		"Hospital finder searches nearby hospitals by specialist type via the Google Maps Places API.",
+		"Signup and login use bcrypt-hashed passwords stored in SQLite."
+	],
+	"links": {
+		"repo": "https://github.com/Life-Experimentalist/CareReach",
+		"live": "https://carereach.streamlit.app/"
+	}
+}
